@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.SystemProperties;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
@@ -34,6 +35,8 @@ public class TeslaSetupWizardData extends AbstractSetupData {
 
     private boolean mTimeSet = false;
     private boolean mTimeZoneSet = false;
+    private boolean mMobileDataEnabled = SystemProperties
+            .getBoolean("ro.com.android.mobiledata", true);
 
     public TeslaSetupWizardData(Context context) {
         super(context);
@@ -57,7 +60,7 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         }
         if (SetupWizardUtils.hasTelephony(mContext)) {
             pages.add(new MobileDataPage(mContext, this)
-                    .setHidden(!isSimInserted() || SetupWizardUtils.isMobileDataEnabled(mContext)));
+                    .setHidden(!isSimInserted() || mMobileDataEnabled));
         }
         if (SetupWizardUtils.hasGMS(mContext)) {
             pages.add(new GmsAccountPage(mContext, this).setHidden(true));
@@ -82,6 +85,7 @@ public class TeslaSetupWizardData extends AbstractSetupData {
                 .equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                 intent.getAction()
                         .equals(ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE)) {
+            showHideMobileDataPage();
             showHideAccountPages();
         } else  if (intent.getAction()
                 .equals(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
@@ -130,7 +134,7 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         MobileDataPage mobileDataPage =
                 (MobileDataPage) getPage(MobileDataPage.TAG);
         if (mobileDataPage != null) {
-            mobileDataPage.setHidden(!isSimInserted());
+            mobileDataPage.setHidden(!isSimInserted() || mMobileDataEnabled);
         }
     }
 
