@@ -102,11 +102,6 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         if (gmsAccountPage != null) {
             gmsAccountPage.setHidden(!isConnected);
         }
-        CyanogenServicesPage cyanogenServicesPage =
-                (CyanogenServicesPage) getPage(CyanogenServicesPage.TAG);
-        if (cyanogenServicesPage != null) {
-            cyanogenServicesPage.setHidden(!isConnected);
-        }
     }
 
     private void showHideSimMissingPage() {

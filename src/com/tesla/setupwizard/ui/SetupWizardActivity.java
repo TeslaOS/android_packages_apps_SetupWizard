@@ -37,11 +37,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;f
+import android.widget.ProgressBar;
 
 import com.tesla.setupwizard.R;
 import com.tesla.setupwizard.SetupWizardApp;
-import com.tesla.setupwizard.setup.TESLASetupWizardData;
+import com.tesla.setupwizard.setup.TeslaSetupWizardData;
 import com.tesla.setupwizard.setup.Page;
 import com.tesla.setupwizard.setup.SetupDataCallbacks;
 import com.tesla.setupwizard.util.EnableAccessibilityController;
@@ -70,13 +70,11 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
 
     private EnableAccessibilityController mEnableAccessibilityController;
 
-    private TESLASetupWizardData mSetupData;
+    private TeslaSetupWizardData mSetupData;
 
     private final Handler mHandler = new Handler();
 
     private volatile boolean mIsFinishing = false;
-
-    private static long sLaunchTime = 0;
 
     private final ArrayList<Runnable> mFinishRunnables = new ArrayList<Runnable>();
 
@@ -94,10 +92,6 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
                         }
                     }
                 });
-        if (sLaunchTime == 0) {
-            SetupStats.addEvent(SetupStats.Categories.APP_LAUNCH, TAG);
-            sLaunchTime = System.nanoTime();
-        }
         setContentView(R.layout.setup_main);
         mRootView = findViewById(R.id.root);
         mRootView.setSystemUiVisibility(UI_FLAGS);
@@ -105,9 +99,9 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
         mButtonBar = findViewById(R.id.button_bar);
         mFinishingProgressBar = (ProgressBar)findViewById(R.id.finishing_bar);
         ((SetupWizardApp)getApplicationContext()).disableStatusBar();
-        mSetupData = (TESLASetupWizardData)getLastNonConfigurationInstance();
+        mSetupData = (TeslaSetupWizardData)getLastNonConfigurationInstance();
         if (mSetupData == null) {
-            mSetupData = new TESLASetupWizardData(getApplicationContext());
+            mSetupData = new TeslaSetupWizardData(getApplicationContext());
         }
         mNextButton = (Button) findViewById(R.id.next_button);
         mPrevButton = (Button) findViewById(R.id.prev_button);
@@ -420,8 +414,6 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
                 final ThemeManager tm =
                         (ThemeManager) SetupWizardActivity.this.getSystemService(THEME_SERVICE);
                 tm.removeClient(SetupWizardActivity.this);
-                SetupStats.sendEvents(SetupWizardActivity.this);
-                SetupWizardUtils.disableGMSSetupWizard(SetupWizardActivity.this);
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.setupwizard.util;
+package com.tesla.setupwizard.util;
 
 import android.accounts.AccountManager;
 import android.content.ComponentName;
@@ -32,7 +32,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.cyanogenmod.setupwizard.SetupWizardApp;
+import com.tesla.setupwizard.SetupWizardApp;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -157,7 +157,7 @@ public class SetupWizardUtils {
 
     public static void disableSetupWizard(Context context) {
         disableComponent(context, context.getPackageName(),
-                "com.cyanogenmod.setupwizard.ui.SetupWizardActivity");
+                "com.tesla.setupwizard.ui.SetupWizardActivity");
     }
 
     public static void disableGMSSetupWizard(Context context) {

@@ -37,7 +37,6 @@ import android.widget.TextView;
 
 import com.tesla.setupwizard.R;
 import com.tesla.setupwizard.SetupWizardApp;
-import com.tesla.setupwizard.cmstats.SetupStats;
 import com.tesla.setupwizard.ui.SetupPageFragment;
 import com.tesla.setupwizard.util.SetupWizardUtils;
 
@@ -124,9 +123,6 @@ public class MobileDataPage extends SetupPage {
                 boolean checked = !mEnableMobileData.isChecked();
                 SetupWizardUtils.setMobileDataEnabled(getActivity(), checked);
                 mEnableMobileData.setChecked(checked);
-                SetupStats.addEvent(SetupStats.Categories.SETTING_CHANGED,
-                        SetupStats.Action.ENABLE_MOBILE_DATA,
-                        SetupStats.Label.CHECKED, String.valueOf(checked));
             }
         };
 

@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tesla.setupwizard.R;
-import com.tesla.setupwizard.cmstats.SetupStats;
 import com.tesla.setupwizard.setup.Page;
 import com.tesla.setupwizard.setup.SetupDataCallbacks;
 
@@ -43,8 +42,6 @@ public abstract class SetupPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        SetupStats.addEvent(SetupStats.Categories.PAGE_LOAD, SetupStats.Action.PAGE_LOADED,
-                mKey, String.valueOf(System.currentTimeMillis()));
     }
 
     @Override

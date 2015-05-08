@@ -40,7 +40,6 @@ import android.widget.TextView;
 
 import com.tesla.setupwizard.R;
 import com.tesla.setupwizard.SetupWizardApp;
-import com.tesla.setupwizard.cmstats.SetupStats;
 import com.tesla.setupwizard.ui.SetupPageFragment;
 import com.tesla.setupwizard.util.SetupWizardUtils;
 
@@ -239,9 +238,6 @@ public class ChooseDataSimPage extends SetupPage {
                 for (int i = 0; i < mCheckBoxes.size(); i++) {
                     if (subInfoRecord.getSimSlotIndex() == i) {
                         mCheckBoxes.get(i).setChecked(true);
-                        SetupStats.addEvent(SetupStats.Categories.SETTING_CHANGED,
-                                SetupStats.Action.PREFERRED_DATA_SIM,
-                                SetupStats.Label.SLOT, String.valueOf(i + 1));
                     } else {
                         mCheckBoxes.get(i).setChecked(false);
                     }

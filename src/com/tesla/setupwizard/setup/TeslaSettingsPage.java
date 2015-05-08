@@ -50,7 +50,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class TeslaSettingsPage extends SetupPage {
-c
     public static final String TAG = "TeslaSettingsPage";
 
     public static final String KEY_ENABLE_NAV_KEYS = "enable_nav_keys";
@@ -80,7 +79,7 @@ c
 
     @Override
     public int getTitleResId() {
-        return R.string.setup_services;
+        return R.string.setup_personalization;
     }
 
     private static void writeDisableNavkeysOption(Context context, boolean enabled) {

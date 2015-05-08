@@ -49,7 +49,7 @@ public class SetupWizardApp extends Application {
     private static final String KEY_DETECT_CAPTIVE_PORTAL = "captive_portal_detection_enabled";
 
     private static final String[] THEME_PACKAGES = {
-            "org.tesla.theme.chooser",
+            "org.cyanogenmod.theme.chooser",
             "com.cyngn.theme.chooser",
             "com.cyngn.themestore"
     };

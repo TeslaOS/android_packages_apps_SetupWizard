@@ -30,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 
 import com.tesla.setupwizard.R;
-import com.tesla.setupwizard.cmstats.SetupStats;
 import com.tesla.setupwizard.ui.LocalePicker;
 import com.tesla.setupwizard.ui.SetupPageFragment;
 
@@ -73,10 +72,6 @@ public class WelcomePage extends SetupPage {
                 ActivityOptions.makeCustomAnimation(mContext,
                         android.R.anim.fade_in,
                         android.R.anim.fade_out);
-        SetupStats.addEvent(SetupStats.Categories.BUTTON_CLICK, SetupStats.Label.EMERGENCY_CALL);
-        SetupStats.addEvent(SetupStats.Categories.EXTERNAL_PAGE_LOAD,
-                SetupStats.Action.EXTERNAL_PAGE_LAUNCH,
-                SetupStats.Label.PAGE,  SetupStats.Label.EMERGENCY_CALL);
         mContext.startActivity(intent, options.toBundle());
         return true;
     }
@@ -163,9 +158,6 @@ public class WelcomePage extends SetupPage {
             localResources.updateConfiguration(localConfiguration1, null);
             mHandler.removeCallbacks(mUpdateLocale);
             mCurrentLocale = paramLocale;
-            SetupStats.addEvent(SetupStats.Categories.SETTING_CHANGED,
-                    SetupStats.Action.CHANGE_LOCALE, SetupStats.Label.LOCALE,
-                    mCurrentLocale.getDisplayName());
             mHandler.postDelayed(mUpdateLocale, 1000);
         }
 
