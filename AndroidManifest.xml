@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
           package="com.tesla.setupwizard"
           android:versionCode="3"
           android:sharedUserId="android.uid.system">
@@ -52,7 +53,8 @@
 
     <permission
         android:name="tesla.permission.FINISH_SETUP"
-        android:protectionLevel="signatureOrSystem" />
+        android:protectionLevel="signatureOrSystem"
+        androidprv:allowViaWhitelist="true" />
 
     <permission android:name="org.whispersystems.whisperpush.permissions.REGISTER"
                 android:protectionLevel="signature" />
