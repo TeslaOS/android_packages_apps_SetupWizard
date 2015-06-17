@@ -158,6 +158,8 @@ public class SetupWizardUtils {
     public static void disableSetupWizard(Context context) {
         disableComponent(context, context.getPackageName(),
                 "com.tesla.setupwizard.ui.SetupWizardActivity");
+        disableComponent(context, context.getPackageName(),
+                "com.tesla.setupwizard.setup.FinishSetupReceiver");
     }
 
     public static void disableGMSSetupWizard(Context context) {

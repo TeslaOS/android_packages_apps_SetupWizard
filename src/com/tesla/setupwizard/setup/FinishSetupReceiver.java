@@ -1,0 +1,26 @@
+package com.tesla.setupwizard.setup;
+
+import android.app.StatusBarManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
+
+import com.tesla.setupwizard.SetupWizardApp;
+import com.tesla.setupwizard.util.SetupWizardUtils;
+
+public class FinishSetupReceiver extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Settings.Global.putInt(context.getContentResolver(), Settings.Global.DEVICE_PROVISIONED, 1);
+        Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.USER_SETUP_COMPLETE, 1);
+        ((StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE)).disable(
+                StatusBarManager.DISABLE_NONE);
+        Settings.Global.putInt(context.getContentResolver(),
+                SetupWizardApp.KEY_DETECT_CAPTIVE_PORTAL, 1);
+        SetupWizardUtils.disableGMSSetupWizard(context);
+        SetupWizardUtils.disableSetupWizard(context);
+    }
+}

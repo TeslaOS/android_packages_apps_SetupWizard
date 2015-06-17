@@ -46,7 +46,7 @@ public class SetupWizardApp extends Application {
     public static final String EXTRA_THEME = "theme";
     public static final String EXTRA_MATERIAL_LIGHT = "material_light";
 
-    private static final String KEY_DETECT_CAPTIVE_PORTAL = "captive_portal_detection_enabled";
+    public static final String KEY_DETECT_CAPTIVE_PORTAL = "captive_portal_detection_enabled";
 
     private static final String[] THEME_PACKAGES = {
             "org.cyanogenmod.theme.chooser",
