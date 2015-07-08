@@ -46,6 +46,12 @@ public class TeslaSetupWizardData extends AbstractSetupData {
             pages.add(new BluetoothSetupPage(mContext, this));
         }
         pages.add(new WelcomePage(mContext, this));
+        if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
+            pages.add(new FingerprintSetupPage(mContext, this));
+        }
+        if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
+            pages.add(new FingerprintSetupPage(mContext, this));
+        }
         pages.add(new WifiSetupPage(mContext, this));
         if (SetupWizardUtils.hasTelephony(mContext)) {
             pages.add(new SimCardMissingPage(mContext, this)
