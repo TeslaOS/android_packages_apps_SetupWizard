@@ -46,12 +46,6 @@ public class TeslaSetupWizardData extends AbstractSetupData {
             pages.add(new BluetoothSetupPage(mContext, this));
         }
         pages.add(new WelcomePage(mContext, this));
-        if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
-            pages.add(new FingerprintSetupPage(mContext, this));
-        }
-        if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
-            pages.add(new FingerprintSetupPage(mContext, this));
-        }
         pages.add(new WifiSetupPage(mContext, this));
         if (SetupWizardUtils.hasTelephony(mContext)) {
             pages.add(new SimCardMissingPage(mContext, this)
@@ -67,6 +61,9 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         }
         if (SetupWizardUtils.hasGMS(mContext)) {
             pages.add(new GmsAccountPage(mContext, this).setHidden(true));
+        }
+        if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
+            pages.add(new FingerprintSetupPage(mContext, this));
         }
         pages.add(new TeslaSettingsPage(mContext, this));
         pages.add(new OtherSettingsPage(mContext, this));
