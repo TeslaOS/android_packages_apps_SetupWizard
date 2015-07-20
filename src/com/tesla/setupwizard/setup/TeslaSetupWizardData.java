@@ -65,7 +65,6 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
             pages.add(new FingerprintSetupPage(mContext, this));
         }
-        pages.add(new TeslaSettingsPage(mContext, this));
         pages.add(new OtherSettingsPage(mContext, this));
         pages.add(new DateTimePage(mContext, this));
         pages.add(new FinishPage(mContext, this));
