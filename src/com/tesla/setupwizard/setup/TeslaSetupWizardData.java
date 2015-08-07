@@ -64,7 +64,7 @@ public class TeslaSetupWizardData extends AbstractSetupData {
                     .setHidden(!isSimInserted() || mMobileDataEnabled));
         }
         if (SetupWizardUtils.hasGMS(mContext)) {
-            pages.add(new GmsAccountPage(mContext, this).setHidden(true));
+            pages.add(new GmsAccountPage(mContext, this));
         }
         if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
             pages.add(new FingerprintSetupPage(mContext, this));
@@ -103,10 +103,10 @@ public class TeslaSetupWizardData extends AbstractSetupData {
 
     private void showHideAccountPages() {
         boolean isConnected = SetupWizardUtils.isNetworkConnected(mContext);
-        GmsAccountPage gmsAccountPage =
-                (GmsAccountPage) getPage(GmsAccountPage.TAG);
-        if (gmsAccountPage != null) {
-            gmsAccountPage.setHidden(!isConnected);
+        TeslaServicesPage teslaServicesPage =
+                (TeslaServicesPage) getPage(TeslaServicesPage.TAG);
+        if (teslaServicesPage != null) {
+            teslaServicesPage.setHidden(!isConnected);
         }
     }
 
