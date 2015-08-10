@@ -191,9 +191,10 @@ public class GmsAccountPage extends SetupPage {
         }
     }
 
-    private boolean canSkip() {
+    public boolean canSkip() {
         final PersistentDataBlockManager pdbManager = (PersistentDataBlockManager)
                 mContext.getSystemService(Context.PERSISTENT_DATA_BLOCK_SERVICE);
+        Log.d(TAG,"GMS skip: OEM unlock is enabled: " + pdbManager.getOemUnlockEnabled() + " and amount of PST blocks is " + pdbManager.getDataBlockSize());
         return pdbManager == null
                 || pdbManager.getDataBlockSize() == 0
                 || pdbManager.getOemUnlockEnabled();
@@ -202,7 +203,7 @@ public class GmsAccountPage extends SetupPage {
     private void launchGmsAccountSetup() {
         Bundle bundle = new Bundle();
         bundle.putBoolean(SetupWizardApp.EXTRA_FIRST_RUN, true);
-        bundle.putBoolean(SetupWizardApp.EXTRA_ALLOW_SKIP, canSkip());
+        bundle.putBoolean(SetupWizardApp.EXTRA_ALLOW_SKIP, true);
         bundle.putBoolean(SetupWizardApp.EXTRA_USE_IMMERSIVE, true);
         bundle.putBoolean(SetupWizardApp.EXTRA_SUPRESS_D2D_SETUP, !mContext.getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_NFC));
