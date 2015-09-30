@@ -45,6 +45,8 @@ import com.tesla.setupwizard.ui.SetupPageFragment;
 import com.tesla.setupwizard.ui.WebViewDialogFragment;
 import com.tesla.setupwizard.util.SetupWizardUtils;
 
+import cyanogenmod.providers.CMSettings;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -97,18 +99,18 @@ public class TeslaSettingsPage extends SetupPage {
         SharedPreferences.Editor editor = prefs.edit();
 
         if (enabled) {
-            int currentBrightness = Settings.Secure.getInt(context.getContentResolver(),
-                    Settings.Secure.BUTTON_BRIGHTNESS, defaultBrightness);
+            int currentBrightness = CMSettings.Secure.getInt(context.getContentResolver(),
+                    CMSettings.Secure.BUTTON_BRIGHTNESS, defaultBrightness);
             if (!prefs.contains("pre_navbar_button_backlight")) {
                 editor.putInt("pre_navbar_button_backlight", currentBrightness);
             }
-            Settings.Secure.putInt(context.getContentResolver(),
-                    Settings.Secure.BUTTON_BRIGHTNESS, 0);
+            CMSettings.Secure.putInt(context.getContentResolver(),
+                    CMSettings.Secure.BUTTON_BRIGHTNESS, 0);
         } else {
             int oldBright = prefs.getInt("pre_navbar_button_backlight", -1);
             if (oldBright != -1) {
-                Settings.Secure.putInt(context.getContentResolver(),
-                        Settings.Secure.BUTTON_BRIGHTNESS, oldBright);
+                CMSettings.Secure.putInt(context.getContentResolver(),
+                        CMSettings.Secure.BUTTON_BRIGHTNESS, oldBright);
                 editor.remove("pre_navbar_button_backlight");
             }
         }

@@ -46,6 +46,8 @@
     <uses-permission android:name="android.permission.BACKUP" />
     <uses-permission android:name="org.whispersystems.whisperpush.permissions.REGISTER" />
     <uses-permission android:name="tesla.permission.FINISH_SETUP" />
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS"/>
 
     <permission
         android:name="tesla.permission.PROTECTED_APP"
