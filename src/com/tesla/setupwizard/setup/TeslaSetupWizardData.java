@@ -83,9 +83,7 @@ public class TeslaSetupWizardData extends AbstractSetupData {
             showHideSimMissingPage();
             showHideMobileDataPage();
         } else if (intent.getAction()
-                .equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
-                intent.getAction()
-                        .equals(ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE)) {
+                .equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             showHideMobileDataPage();
             showHideAccountPages();
         } else  if (intent.getAction()
@@ -156,7 +154,6 @@ public class TeslaSetupWizardData extends AbstractSetupData {
             filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
             filter.addAction(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED);
         }
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         filter.addAction(Intent.ACTION_TIME_CHANGED);

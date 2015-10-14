@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.ComponentInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -32,9 +33,9 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.tesla.setupwizard.SetupWizardApp;
-import com.android.internal.widget.LockPatternUtils;
+/*import com.android.internal.os.IKillSwitchService;*/
 
+import com.tesla.setupwizard.SetupWizardApp;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -85,7 +86,7 @@ public class SetupWizardUtils {
             android.provider.Settings.Global.putInt(context.getContentResolver(),
                     android.provider.Settings.Global.MOBILE_DATA + phoneId, enabled ? 1 : 0);
             int subId = SubscriptionManager.getDefaultDataSubId();
-            tm.setDataEnabledUsingSubId(subId, enabled);
+            tm.setDataEnabled(subId, enabled);
         } else {
             android.provider.Settings.Global.putInt(context.getContentResolver(),
                     android.provider.Settings.Global.MOBILE_DATA, enabled ? 1 : 0);
@@ -235,8 +236,9 @@ public class SetupWizardUtils {
     }
 
     public static boolean hasFingerprint(Context context) {
-        LockPatternUtils lockPatternUtils = new LockPatternUtils(context);
-        return lockPatternUtils.isFingerprintInstalled(context);
+        FingerprintManager fingerprintManager = (FingerprintManager)
+                context.getSystemService(Context.FINGERPRINT_SERVICE);
+        return fingerprintManager.isHardwareDetected();
     }
 
     public static final ComponentName mTvwifisettingsActivity =
