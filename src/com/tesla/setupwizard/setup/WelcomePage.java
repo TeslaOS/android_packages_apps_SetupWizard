@@ -23,12 +23,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.tesla.setupwizard.R;
 import com.tesla.setupwizard.ui.LocalePicker;
@@ -106,7 +108,7 @@ public class WelcomePage extends SetupPage {
 
     public void simChanged() {
         if (mWelcomeFragment != null) {
-            mWelcomeFragment.simChanged();
+            mWelcomeFragment.fetchAndUpdateSimLocale();
         }
     }
 
@@ -116,9 +118,9 @@ public class WelcomePage extends SetupPage {
         private Locale mInitialLocale;
         private Locale mCurrentLocale;
         private int[] mAdapterIndices;
-        private boolean mUserPickedLocale;
+        private boolean mIgnoreSimLocale;
         private LocalePicker mLanguagePicker;
-
+        private FetchUpdateSimLocaleTask mFetchUpdateSimLocaleTask;
         private final Handler mHandler = new Handler();
 
         private final Runnable mUpdateLocale = new Runnable() {
@@ -141,26 +143,10 @@ public class WelcomePage extends SetupPage {
             }
         }
 
-        private Locale getSimLocale() {
-            Activity activity = getActivity();
-            if (activity != null) {
-                TelephonyManager telephonyManager = (TelephonyManager) activity.
-                        getSystemService(Context.TELEPHONY_SERVICE);
-                String locale = telephonyManager.getLocaleFromDefaultSim();
-                if (locale != null) {
-                    return Locale.forLanguageTag(locale);
-                }
-            }
-            return null;
-        }
-
         private void loadLanguages() {
             mLocaleAdapter = com.android.internal.app.LocalePicker.constructAdapter(getActivity(), R.layout.locale_picker_item, R.id.locale);
             mCurrentLocale = mInitialLocale = Locale.getDefault();
-            Locale simLocale = getSimLocale();
-            if (simLocale != null) {
-                mCurrentLocale = simLocale;
-            }
+            fetchAndUpdateSimLocale();
             mAdapterIndices = new int[mLocaleAdapter.getCount()];
             int currentLocaleIndex = 0;
             String [] labels = new String[mLocaleAdapter.getCount()];
@@ -182,10 +168,18 @@ public class WelcomePage extends SetupPage {
                     setLocaleFromPicker();
                 }
             });
+            mLanguagePicker.setOnScrollListener(new LocalePicker.OnScrollListener() {
+                @Override
+                public void onScrollStateChange(LocalePicker view, int scrollState) {
+                    if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                        mIgnoreSimLocale = true;
+                    }
+                }
+            });
         }
 
         private void setLocaleFromPicker() {
-            mUserPickedLocale = true;
+            mIgnoreSimLocale = true;
             int i = mAdapterIndices[mLanguagePicker.getValue()];
             final com.android.internal.app.LocalePicker.LocaleInfo localLocaleInfo = mLocaleAdapter.getItem(i);
             onLocaleChanged(localLocaleInfo.getLocale());
@@ -209,13 +203,42 @@ public class WelcomePage extends SetupPage {
             return R.layout.setup_welcome_page;
         }
 
-        public void simChanged() {
-            if (mUserPickedLocale || isDetached()) {
+        public void fetchAndUpdateSimLocale() {
+            if (mIgnoreSimLocale || isDetached()) {
                 return;
             }
-            Locale simLocale = getSimLocale();
-            if (simLocale != null && !simLocale.equals(mCurrentLocale)) {
-                onLocaleChanged(simLocale);
+            if (mFetchUpdateSimLocaleTask != null) {
+                mFetchUpdateSimLocaleTask.cancel(true);
+            }
+            mFetchUpdateSimLocaleTask = new FetchUpdateSimLocaleTask();
+            mFetchUpdateSimLocaleTask.execute();
+        }
+
+        private class FetchUpdateSimLocaleTask extends AsyncTask<Void, Void, Locale> {
+            @Override
+            protected Locale doInBackground(Void... params) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    TelephonyManager telephonyManager = (TelephonyManager) activity.
+                            getSystemService(Context.TELEPHONY_SERVICE);
+                    String locale = telephonyManager.getLocaleFromDefaultSim();
+                    if (locale != null) {
+                        return Locale.forLanguageTag(locale);
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Locale simLocale) {
+                if (simLocale != null && !simLocale.equals(mCurrentLocale)) {
+                    if (!mIgnoreSimLocale && !isDetached()) {
+                        String label = getString(R.string.sim_locale_changed,
+                                simLocale.getDisplayName());
+                        Toast.makeText(getActivity(), label, Toast.LENGTH_SHORT).show();
+                        onLocaleChanged(simLocale);
+                    }
+                }
             }
         }
     }
