@@ -31,6 +31,7 @@ import android.os.UserManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 /*import com.android.internal.os.IKillSwitchService;*/
@@ -38,6 +39,9 @@ import android.util.Log;
 import com.tesla.setupwizard.SetupWizardApp;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import cyanogenmod.providers.CMSettings;
+
+import static android.content.res.ThemeConfig.SYSTEM_DEFAULT;
 
 public class SetupWizardUtils {
 
@@ -239,6 +243,24 @@ public class SetupWizardUtils {
         FingerprintManager fingerprintManager = (FingerprintManager)
                 context.getSystemService(Context.FINGERPRINT_SERVICE);
         return fingerprintManager.isHardwareDetected();
+    }
+
+    public static String getDefaultThemePackageName(Context context) {
+        final String defaultThemePkg = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEFAULT_THEME_PACKAGE);
+        if (!TextUtils.isEmpty(defaultThemePkg)) {
+            PackageManager pm = context.getPackageManager();
+            try {
+                if (pm.getPackageInfo(defaultThemePkg, 0) != null) {
+                    return defaultThemePkg;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                // doesn't exist so system will be default
+                Log.w(TAG, "Default theme " + defaultThemePkg + " not found");
+            }
+        }
+
+        return SYSTEM_DEFAULT;
     }
 
     public static final ComponentName mTvwifisettingsActivity =

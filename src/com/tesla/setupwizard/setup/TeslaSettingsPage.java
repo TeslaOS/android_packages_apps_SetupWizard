@@ -20,9 +20,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-/*import android.content.pm.ThemeUtils;
+import android.content.pm.ThemeUtils;
 import android.content.res.ThemeConfig;
-import android.content.res.ThemeManager;*/
+import android.content.res.ThemeManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
@@ -131,16 +131,17 @@ public class TeslaSettingsPage extends SetupPage {
     }
 
     private void handleDefaultThemeSetup() {
-        /*Bundle privacyData = getData();
-        if (!ThemeUtils.getDefaultThemePackageName(mContext).equals(ThemeConfig.SYSTEM_DEFAULT) &&
-                privacyData != null && privacyData.getBoolean(KEY_APPLY_DEFAULT_THEME)) {
+        Bundle privacyData = getData();
+        if (!SetupWizardUtils.getDefaultThemePackageName(mContext).equals(
+                ThemeConfig.SYSTEM_DEFAULT) && privacyData != null &&
+                privacyData.getBoolean(KEY_APPLY_DEFAULT_THEME)) {
             Log.i(TAG, "Applying default theme");
             final ThemeManager tm = (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
             tm.applyDefaultTheme();
 
-        } else {*/
+        } else {
             getCallbacks().finishSetup();
-        //}
+        }
     }
 
     private static boolean hideKeyDisabler(Context ctx) {
@@ -153,9 +154,10 @@ public class TeslaSettingsPage extends SetupPage {
         return hardware.get(CMHardwareManager.FEATURE_KEY_DISABLE);
       }
 
-    /*private static boolean hideThemeSwitch(Context context) {
-        return ThemeUtils.getDefaultThemePackageName(context).equals(ThemeConfig.SYSTEM_DEFAULT);
-    }*/
+      private static boolean hideThemeSwitch(Context context) {
+          return SetupWizardUtils.getDefaultThemePackageName(context)
+                                 .equals(ThemeConfig.SYSTEM_DEFAULT);
+      }
 
     public static class TeslaSettingsFragment extends SetupPageFragment {
 
