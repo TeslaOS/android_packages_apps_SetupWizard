@@ -127,6 +127,8 @@ public class WelcomePage extends SetupPage {
         private LocalePicker mLanguagePicker;
         private FetchUpdateSimLocaleTask mFetchUpdateSimLocaleTask;
         private final Handler mHandler = new Handler();
+        private boolean mPendingLocaleUpdate;
+        private boolean mPaused = true;
 
         private final Runnable mUpdateLocale = new Runnable() {
             public void run() {
@@ -212,6 +214,10 @@ public class WelcomePage extends SetupPage {
             if (mIgnoreSimLocale || isDetached()) {
                 return;
             }
+            if (mPaused) {
+                mPendingLocaleUpdate = true;
+                return;
+            }
             if (mFetchUpdateSimLocaleTask != null) {
                 mFetchUpdateSimLocaleTask.cancel(true);
             }
@@ -225,6 +231,15 @@ public class WelcomePage extends SetupPage {
                 Locale locale = null;
                 Activity activity = getActivity();
                 if (activity != null) {
+                    // If the sim is currently pin locked, return
+                    TelephonyManager telephonyManager = (TelephonyManager)
+                            activity.getSystemService(Context.TELEPHONY_SERVICE);
+                    int state = telephonyManager.getSimState();
+                    if(state == TelephonyManager.SIM_STATE_PIN_REQUIRED ||
+                            state == TelephonyManager.SIM_STATE_PUK_REQUIRED) {
+                        return null;
+                    }
+
                     final SubscriptionManager subscriptionManager =
                             SubscriptionManager.from(activity);
                     List<SubscriptionInfo> activeSubs =
@@ -240,8 +255,6 @@ public class WelcomePage extends SetupPage {
                     // If that fails, fall back to preferred languages reported
                     // by the sim
                     if (locale == null) {
-                        TelephonyManager telephonyManager = (TelephonyManager) activity.
-                                getSystemService(Context.TELEPHONY_SERVICE);
                         String localeString = telephonyManager.getLocaleFromDefaultSim();
                         if (localeString != null) {
                             locale = Locale.forLanguageTag(localeString);
@@ -260,8 +273,25 @@ public class WelcomePage extends SetupPage {
                                 simLocale.getDisplayName());
                         Toast.makeText(getActivity(), label, Toast.LENGTH_SHORT).show();
                         onLocaleChanged(simLocale);
+                        mIgnoreSimLocale = true;
                     }
                 }
+            }
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            mPaused = true;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            mPaused = false;
+            if (mPendingLocaleUpdate) {
+                mPendingLocaleUpdate = false;
+                fetchAndUpdateSimLocale();
             }
         }
     }
