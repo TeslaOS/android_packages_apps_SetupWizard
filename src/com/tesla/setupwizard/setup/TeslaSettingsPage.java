@@ -21,7 +21,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ThemeConfig;
-import android.content.res.ThemeManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
@@ -45,6 +45,7 @@ import com.tesla.setupwizard.util.SetupWizardUtils;
 
 import cyanogenmod.hardware.CMHardwareManager;
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.themes.ThemeManager;
 
 public class TeslaSettingsPage extends SetupPage {
     public static final String TAG = "TeslaSettingsPage";
@@ -120,7 +121,7 @@ public class TeslaSettingsPage extends SetupPage {
                 ThemeConfig.SYSTEM_DEFAULT) && privacyData != null &&
                 privacyData.getBoolean(KEY_APPLY_DEFAULT_THEME)) {
             Log.i(TAG, "Applying default theme");
-            final ThemeManager tm = (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
+            final ThemeManager tm = ThemeManager.getInstance();
             tm.applyDefaultTheme();
 
         } else {
