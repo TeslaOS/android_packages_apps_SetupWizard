@@ -424,7 +424,7 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
                     mEnableAccessibilityController.onDestroy();
                 }
                 final ThemeManager tm = ThemeManager.getInstance();
-                tm.removeClient(SetupWizardActivity.this);*/
+                tm.removeClient(SetupWizardActivity.this);
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
