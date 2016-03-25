@@ -121,7 +121,7 @@ public class TeslaSettingsPage extends SetupPage {
                 ThemeConfig.SYSTEM_DEFAULT) && privacyData != null &&
                 privacyData.getBoolean(KEY_APPLY_DEFAULT_THEME)) {
             Log.i(TAG, "Applying default theme");
-            final ThemeManager tm = ThemeManager.getInstance();
+            final ThemeManager tm = ThemeManager.getInstance(mContext);
             tm.applyDefaultTheme();
 
         } else {

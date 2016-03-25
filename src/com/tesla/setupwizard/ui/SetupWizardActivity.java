@@ -310,7 +310,7 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
         mFinishingProgressBar.setVisibility(View.VISIBLE);
         mFinishingProgressBar.setIndeterminate(true);
         mFinishingProgressBar.startAnimation(fadeIn);
-        final ThemeManager tm = ThemeManager.getInstance();
+        final ThemeManager tm = ThemeManager.getInstance(this);
         tm.addClient(this);
         mSetupData.finishPages();
     }
@@ -423,7 +423,7 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
                 if (mEnableAccessibilityController != null) {
                     mEnableAccessibilityController.onDestroy();
                 }
-                final ThemeManager tm = ThemeManager.getInstance();
+                final ThemeManager tm = ThemeManager.getInstance(SetupWizardActivity.this);
                 tm.removeClient(SetupWizardActivity.this);
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
