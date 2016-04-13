@@ -108,11 +108,6 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         if (gmsAccountPage != null) {
             gmsAccountPage.setHidden(!isConnected && gmsAccountPage.canSkip());
         }
-        TeslaServicesPage teslaServicesPage =
-                (TeslaServicesPage) getPage(TeslaServicesPage.TAG);
-        if (teslaServicesPage != null) {
-            teslaServicesPage.setHidden(!isConnected);
-        }
     }
 
     private void showHideSimMissingPage() {
