@@ -87,11 +87,9 @@ public class TeslaSetupWizardData extends AbstractSetupData {
         } else if (intent.getAction()
                 .equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             showHideMobileDataPage();
-            showHideAccountPages();
         } else  if (intent.getAction()
                 .equals(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
             showHideMobileDataPage();
-            showHideAccountPages();
         } else if (intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED) ||
                 intent.getAction().equals(TelephonyIntents.ACTION_NETWORK_SET_TIMEZONE)) {
             mTimeZoneSet = true;

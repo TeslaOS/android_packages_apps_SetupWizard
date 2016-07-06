@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.util.Log;
 
@@ -145,13 +144,13 @@ public class GmsAccountPage extends SetupPage {
                         data.hasExtra(EXTRA_AUTH_ACCOUNT);
                 launchGmsRestorePage(restorePicker);
             } else {
-                handleResult(resultCode);
+                handleResult(requestCode, resultCode);
             }
         } else {
             if (requestCode == SetupWizardApp.REQUEST_CODE_RESTORE_GMS) {
                 setHidden(true);
             }
-            handleResult(resultCode);
+            handleResult(requestCode, resultCode);
         }
         return true;
     }
@@ -168,7 +167,7 @@ public class GmsAccountPage extends SetupPage {
 
     }
 
-    private void handleResult(int resultCode) {
+    private void handleResult(int requestCode, int resultCode) {
         if (resultCode == Activity.RESULT_CANCELED) {
             getCallbacks().onPreviousPage();
         }  else {

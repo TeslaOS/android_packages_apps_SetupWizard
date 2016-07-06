@@ -41,25 +41,21 @@
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="cyanogenmod.permission.HARDWARE_ABSTRACTION_ACCESS" />
     <uses-permission android:name="android.permission.BACKUP" />
-    <uses-permission android:name="org.whispersystems.whisperpush.permissions.REGISTER" />
-    <uses-permission android:name="tesla.permission.FINISH_SETUP" />
+    <uses-permission android:name="cyanogenmod.permission.FINISH_SETUP" />
     <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS"/>
 
     <permission
-        android:name="tesla.permission.PROTECTED_APP"
+        android:name="cyanogenmod.permission.PROTECTED_APP"
         android:protectionLevel="signatureOrSystem" />
 
     <permission
-        android:name="tesla.permission.FINISH_SETUP"
+        android:name="cyanogenmod.permission.FINISH_SETUP"
         android:protectionLevel="signatureOrSystem"
         androidprv:allowViaWhitelist="true" />
 
-    <permission android:name="org.whispersystems.whisperpush.permissions.REGISTER"
-                android:protectionLevel="signature" />
-
     <protected-broadcast android:name="com.tesla.setupwizard.SETUP_FINISHED"
-                         android:permission="tesla.permission.FINISH_SETUP"/>
+                         android:permission="cyanogenmod.permission.FINISH_SETUP"/>
 
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />
 

@@ -451,9 +451,7 @@ public class SetupWizardActivity extends Activity implements SetupDataCallbacks,
                 }
                 final ThemeManager tm = ThemeManager.getInstance(SetupWizardActivity.this);
                 tm.unregisterThemeChangeListener(SetupWizardActivity.this);
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                startActivity(intent);
+                SetupWizardUtils.disableGMSSetupWizard(SetupWizardActivity.this);
                 final WallpaperManager wallpaperManager =
                         WallpaperManager.getInstance(SetupWizardActivity.this);
                 wallpaperManager.forgetLoadedWallpaper();

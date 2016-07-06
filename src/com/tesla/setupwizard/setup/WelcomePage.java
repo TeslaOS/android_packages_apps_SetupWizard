@@ -16,6 +16,10 @@
 
 package com.tesla.setupwizard.setup;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -36,6 +40,7 @@ import android.widget.Toast;
 
 import com.android.internal.telephony.MccTable;
 import com.tesla.setupwizard.R;
+import com.tesla.setupwizard.SetupWizardApp;
 import com.tesla.setupwizard.ui.LocalePicker;
 import com.tesla.setupwizard.ui.SetupPageFragment;
 import com.tesla.setupwizard.util.SetupWizardUtils;
@@ -49,21 +54,23 @@ public class WelcomePage extends SetupPage {
 
     private static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
 
+    private WelcomeFragment mWelcomeFragment;
+
     public WelcomePage(Context context, SetupDataCallbacks callbacks) {
         super(context, callbacks);
     }
 
     @Override
     public Fragment getFragment(FragmentManager fragmentManager, int action) {
-        Fragment fragment = fragmentManager.findFragmentByTag(getKey());
-        if (fragment == null) {
+        mWelcomeFragment = (WelcomeFragment)fragmentManager.findFragmentByTag(getKey());
+        if (mWelcomeFragment == null) {
             Bundle args = new Bundle();
             args.putString(Page.KEY_PAGE_ARGUMENT, getKey());
             args.putInt(Page.KEY_PAGE_ACTION, action);
-            fragment = new WelcomeFragment();
-            fragment.setArguments(args);
+            mWelcomeFragment = new WelcomeFragment();
+            mWelcomeFragment.setArguments(args);
         }
-        return fragment;
+        return mWelcomeFragment;
     }
 
     @Override
@@ -73,11 +80,7 @@ public class WelcomePage extends SetupPage {
 
     @Override
     public boolean doNextAction() {
-            if (mWelcomeFragment != null) {
-                mWelcomeFragment.sendLocaleStats();
-            }
             return super.doNextAction();
-        }
     }
 
     @Override
@@ -94,8 +97,29 @@ public class WelcomePage extends SetupPage {
     }
 
     @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SetupWizardApp.REQUEST_CODE_UNLOCK) {
+            if (resultCode == Activity.RESULT_OK) {
+                ((SetupWizardApp) mContext.getApplicationContext()).setIsAuthorized(true);
+                getCallbacks().onNextPage();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public String getKey() {
         return TAG;
+    }
+
+    @Override
+    public int getNextButtonTitleResId() {
+        if (isLocked()) {
+            return R.string.setup_unlock;
+        } else {
+            return R.string.next;
+        }
     }
 
     @Override

@@ -21,7 +21,9 @@ import android.app.ActivityOptions;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.CaptivePortal;
 import android.net.ConnectivityManager;
+import android.net.ICaptivePortal;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -37,6 +39,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 public class WifiSetupPage extends SetupPage {
 
@@ -44,9 +47,6 @@ public class WifiSetupPage extends SetupPage {
 
     private static final String DEFAULT_SERVER = "clients3.google.com";
     private static final int CAPTIVE_PORTAL_SOCKET_TIMEOUT_MS = 10000;
-
-    private static final String CAPTIVE_PORTAL_LOGIN_ACTION
-            = "android.net.action.captive_portal_login";
 
     private LoadingFragment mLoadingFragment;
 
@@ -56,15 +56,25 @@ public class WifiSetupPage extends SetupPage {
 
     private final Handler mHandler = new Handler();
 
+    private String mResponseToken;
+
     private Runnable mFinishCaptivePortalCheckRunnable = new Runnable() {
         @Override
         public void run() {
             if (mIsCaptivePortal) {
                 try {
-                    int netId = ConnectivityManager.from(mContext)
-                            .getNetworkForType(ConnectivityManager.TYPE_WIFI).netId;
-                    Intent intent = new Intent(CAPTIVE_PORTAL_LOGIN_ACTION);
-                    intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(netId));
+                    mResponseToken = String.valueOf(new Random().nextLong());
+                    final Intent intent = new Intent(
+                            ConnectivityManager.ACTION_CAPTIVE_PORTAL_SIGN_IN);
+                    intent.putExtra(Intent.EXTRA_TEXT, mResponseToken);
+                    intent.putExtra(ConnectivityManager.EXTRA_NETWORK,
+                            ConnectivityManager.from(mContext)
+                                    .getNetworkForType(ConnectivityManager.TYPE_WIFI));
+                    intent.putExtra(ConnectivityManager.EXTRA_CAPTIVE_PORTAL,
+                            new CaptivePortal(new ICaptivePortal.Stub() {
+                                @Override
+                                public void appResponse(int response) {}
+                            }));
                     intent.putExtra("status_bar_color",
                             mContext.getResources().getColor(R.color.primary_dark));
                     intent.putExtra("action_bar_color", mContext.getResources().getColor(
@@ -143,17 +153,26 @@ public class WifiSetupPage extends SetupPage {
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SetupWizardApp.REQUEST_CODE_SETUP_WIFI) {
             if (resultCode == Activity.RESULT_CANCELED) {
-                getCallbacks().onPreviousPage();
+                        getCallbacks().onPreviousPage();
             } else if (resultCode == Activity.RESULT_OK) {
                 checkForCaptivePortal();
             } else {
                 getCallbacks().onNextPage();
             }
         } else if (requestCode == SetupWizardApp.REQUEST_CODE_SETUP_CAPTIVE_PORTAL) {
-            if (resultCode == Activity.RESULT_CANCELED) {
+            if (data == null) {
+                launchWifiSetup();
+                return true;
+            }
+            String token = data.getStringExtra("response_token");
+            if (token != null && !token.equals(mResponseToken)) {
                 launchWifiSetup();
             } else {
-                getCallbacks().onNextPage();
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    launchWifiSetup();
+                } else {
+                    getCallbacks().onNextPage();
+                }
             }
         }  else {
             return false;

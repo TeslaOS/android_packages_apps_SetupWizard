@@ -70,12 +70,15 @@ public class SetupWizardApp extends Application {
     public static final int REQUEST_CODE_SETUP_CAPTIVE_PORTAL= 4;
     public static final int REQUEST_CODE_SETUP_BLUETOOTH= 5;
 
+    public static final int REQUEST_CODE_UNLOCK = 6;
     public static final int REQUEST_CODE_SETUP_FINGERPRINT = 7;
     public static final int REQUEST_CODE_VENDOR_SETUP_GMS = 8;
 
     public static final int RADIO_READY_TIMEOUT = 10 * 1000;
 
     private boolean mIsRadioReady = false;
+
+    private boolean mIsAuthorized = false;
 
     private StatusBarManager mStatusBarManager;
 
@@ -134,6 +137,14 @@ public class SetupWizardApp extends Application {
             mHandler.removeCallbacks(mRadioTimeoutRunnable);
         }
         mIsRadioReady = radioReady;
+    }
+
+    public boolean isAuthorized() {
+        return mIsAuthorized;
+    }
+
+    public void setIsAuthorized(boolean isAuthorized) {
+        mIsAuthorized = isAuthorized;
     }
 
     public void disableStatusBar() {

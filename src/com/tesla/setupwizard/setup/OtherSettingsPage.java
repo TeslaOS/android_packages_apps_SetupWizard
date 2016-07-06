@@ -159,25 +159,6 @@ public class OtherSettingsPage extends SetupPage {
             };
         }
 
-        private boolean isBackupRestoreEnabled() {
-            try {
-                return mBackupManager.isBackupEnabled();
-            } catch (Exception e) {
-                return false;
-            }
-        }
-
-        private void updateBackupToggle() {
-            mBackup.setChecked(isBackupRestoreEnabled());
-        }
-
-        private void onToggleBackup(boolean checked) {
-            try {
-                mBackupManager.setBackupEnabled(checked);
-            } catch (RemoteException e) {}
-            updateBackupToggle();
-        }
-
         private void setLocationMode(int mode) {
             Intent intent = new Intent(MODE_CHANGING_ACTION);
             intent.putExtra(CURRENT_MODE_KEY, mCurrentMode);
@@ -269,4 +250,5 @@ public class OtherSettingsPage extends SetupPage {
                 setLocationMode(Settings.Secure.LOCATION_MODE_SENSORS_ONLY);
             }
         }
+    }        
 }

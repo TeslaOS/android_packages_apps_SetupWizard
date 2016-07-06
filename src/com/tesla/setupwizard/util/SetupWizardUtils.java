@@ -28,6 +28,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.service.persistentdata.PersistentDataBlockManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -128,6 +129,27 @@ public class SetupWizardUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isDeviceLocked() {
+        /* IBinder b = ServiceManager.getService(Context.KILLSWITCH_SERVICE);
+        IKillSwitchService service = IKillSwitchService.Stub.asInterface(b);
+        if (service != null) {
+            try {
+                return service.isDeviceLocked();
+            } catch (Exception e) {
+                // silently fail
+            }
+        }*/
+        return false;
+    }
+
+    public static boolean frpEnabled(Context context) {
+        final PersistentDataBlockManager pdbManager = (PersistentDataBlockManager)
+                context.getSystemService(Context.PERSISTENT_DATA_BLOCK_SERVICE);
+        return pdbManager != null
+                && pdbManager.getDataBlockSize() > 0
+                && !pdbManager.getOemUnlockEnabled();
     }
 
     public static boolean isRadioReady(Context context, ServiceState state) {
